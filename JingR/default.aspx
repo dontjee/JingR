@@ -7,7 +7,7 @@
 <asp:Content ID="scripts" ContentPlaceHolderID="Scripts" runat="server">
 <script type="text/javascript" src="Scripts/jquery.signalR.min.js"></script>
 <script src="/signalr/hubs" type="text/javascript"></script>
-<script type="text/javascript" src="Scripts/raphael.js"></script>
+<script type="text/javascript" src="Scripts/raphael-min.js"></script>
 
 <script type="text/javascript">
    $(function () {
