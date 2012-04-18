@@ -1,0 +1,23 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Base.master.cs" Inherits="JingR.Base" %>
+
+<!doctype html>
+
+<html lang="en">
+<head runat="server">
+   <meta charset="utf-8"/>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+   <title>JingR</title>
+   <meta name="description" content="">
+   <meta name="viewport" content="width=device-width">
+   <asp:ContentPlaceHolder ID="head" runat="server">
+   </asp:ContentPlaceHolder>
+   <script src="Scripts/modernizr-2.5.3.js"></script>
+</head>
+<body>
+   <form id="form1" runat="server">
+      <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+       
+      </asp:ContentPlaceHolder>
+   </form>
+</body>
+</html>
