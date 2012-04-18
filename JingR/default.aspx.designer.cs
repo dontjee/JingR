@@ -11,7 +11,7 @@ namespace JingR
 {
 
 
-   public partial class _default
+   public partial class Default
    {
    }
 }
