@@ -6,3 +6,5 @@
 *.vspscc
 *.vssscc
 *.dotCover
+*.ncrunchsolution
+*_Resharper*
