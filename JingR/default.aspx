@@ -3,6 +3,7 @@
 </asp:Content>
 <asp:Content ID="body" ContentPlaceHolderID="Body" runat="server">
    <a id="clicker" href="#">Click Me</a>
+   <div id="paper"></div>
 </asp:Content>
 <asp:Content ID="scripts" ContentPlaceHolderID="Scripts" runat="server">
 <script type="text/javascript" src="Scripts/jquery.signalR.min.js"></script>
@@ -10,18 +11,40 @@
 <script type="text/javascript" src="Scripts/raphael-min.js"></script>
 
 <script type="text/javascript">
-   $(function () {
+   var drawingModule = (function () {
+      var paper;
       var drawing = $.connection.draw;
 
       drawing.drawIt = function (points) {
-         alert(points);
+         paper.text(10, 10, points);
       };
 
-      $('#clicker').click(function () {
-         drawing.sendIt("1,2");
-      });
 
       $.connection.hub.start();
+
+      var setupEvents = function () {
+         var clickBox = paper.rect(0, 0, 500, 500).attr({fill:'blue', 'fill-opacity': 0});
+
+         clickBox.click(function () {
+            drawing.sendIt("1,2");
+         });
+      };
+
+      return {
+         init: function (paperIn) {
+            paper = paperIn;
+            setupEvents();
+         }
+      };
+   })();
+
+</script>
+<script type="text/javascript">
+   $(function () {
+      var paper = Raphael("paper", 500, 500);
+      var c = paper.rect(40, 40, 50, 50, 10);
+
+      drawingModule.init(paper);
    });
 </script>
 </asp:Content>
