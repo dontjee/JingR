@@ -61,6 +61,13 @@
    <script type="text/javascript" src="/signalr/hubs"></script>
    <script type="text/javascript" src="Scripts/raphael-min.js"></script>
    <script type="text/javascript">
+      Raphael.fn.arrow = function (x1, y1, x2, y2, size) {
+         var angle = Math.atan2(x1 - x2, y2 - y1);
+         angle = (angle / (2 * Math.PI)) * 360;
+         var arrowPath = this.path("M" + x2 + " " + y2 + " L" + (x2 - size) + " " + (y2 - size) + " L" + (x2 - size) + " " + (y2 + size) + " L" + x2 + " " + y2).attr("fill", "black").rotate((90 + angle), x2, y2);
+         var linePath = this.path("M" + x1 + " " + y1 + " L" + x2 + " " + y2);
+         return [linePath, arrowPath];
+      };
       var drawingModule = (function () {
          var paper;
          var drawing = $.connection.drawingHub;
@@ -78,6 +85,10 @@
             paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
          };
 
+         drawing.receiveArrow = function (x1, y1, x2, y2) {
+            paper.arrow(x1, y1, x2, y2, 12);
+         };
+
 
          $.connection.hub.start();
 
@@ -85,11 +96,11 @@
          var handlePaperClick = function (begin, end) {
             var selectedType = drawingTypeButtons.children('.active').data('type');
 
-            if(selectedType === 'line') {
+            if (selectedType === 'line') {
                drawing.sendLine(begin.x, begin.y, end.x, end.y);
-            } else if(selectedType == 'arrow') {
-               //todo
-            } else if( selectedType === 'text') {
+            } else if (selectedType == 'arrow') {
+               drawing.sendArrow(begin.x, begin.y, end.x, end.y);
+            } else if (selectedType === 'text') {
                drawing.sendIt(end.x, end.y);
             }
          };
