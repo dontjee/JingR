@@ -2,7 +2,6 @@
 <asp:Content ID="head" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="body" ContentPlaceHolderID="Body" runat="server">
-   <a id="clicker" href="#">Click Me</a>
    <div id="paper"></div>
 </asp:Content>
 <asp:Content ID="scripts" ContentPlaceHolderID="Scripts" runat="server">
@@ -13,20 +12,20 @@
 <script type="text/javascript">
    var drawingModule = (function () {
       var paper;
-      var drawing = $.connection.draw;
+      var drawing = $.connection.drawingHub;
 
-      drawing.drawIt = function (points) {
-         paper.text(10, 10, points);
+      drawing.drawIt = function (x, y) {
+         paper.text(x, y, 'you clicked here');
       };
 
 
       $.connection.hub.start();
 
       var setupEvents = function () {
-         var clickBox = paper.rect(0, 0, 500, 500).attr({fill:'blue', 'fill-opacity': 0});
+         var clickBox = paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
 
-         clickBox.click(function () {
-            drawing.sendIt("1,2");
+         clickBox.click(function (e) {
+            drawing.sendIt(e.offsetX, e.offsetY);
          });
       };
 
@@ -42,7 +41,6 @@
 <script type="text/javascript">
    $(function () {
       var paper = Raphael("paper", 500, 500);
-      var c = paper.rect(40, 40, 50, 50, 10);
 
       drawingModule.init(paper);
    });
