@@ -32,12 +32,9 @@
             <label class="control-label">
                Draw:</label>
             <div class="btn-group inline controls" data-toggle="buttons-radio">
-               <button class="btn active">
-                  Line</button>
-               <button class="btn">
-                  Arrow</button>
-               <button class="btn">
-                  Text</button>
+               <button class="btn active" data-type="line">Line</button>
+               <button class="btn" data-type="arrow">Arrow</button>
+               <button class="btn" data-type="text">Text</button>
             </div>
          </div>
       </div>
@@ -77,6 +74,10 @@
             image.click(handlePaperClick);
          };
 
+         drawing.receiveLine = function (x1, y1, x2, y2) {
+            var line = paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
+         };
+
 
          $.connection.hub.start();
 
@@ -87,7 +88,28 @@
          var setupEvents = function () {
             var clickBox = paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
 
-            clickBox.click(handlePaperClick);
+            //clickBox.click(handlePaperClick);
+
+            var paperOffset = $('#paper').offset();
+            var begin, end;
+            clickBox.mousedown(function (e) {
+               begin = {
+                  x: e.clientX - paperOffset.left,
+                  y: e.clientY - paperOffset.top
+               };
+            });
+
+            clickBox.mouseup(function (e) {
+               end = {
+                  x: e.clientX - paperOffset.left,
+                  y: e.clientY - paperOffset.top
+               };
+
+               drawing.sendLine(begin.x, begin.y, end.x, end.y);
+
+               begin = null;
+               end = null;
+            });
 
             $('#loadImageSubmit').click(function () {
                var url = $(this).parent().siblings('.modal-body').children('input').val();
