@@ -8,5 +8,10 @@ namespace JingR
       {
          Clients.drawIt( x, y );
       }
+
+      public void SendImage( string url )
+      {
+         Clients.receiveImage( url );
+      }
    }
 }
