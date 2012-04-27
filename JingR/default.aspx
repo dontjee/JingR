@@ -20,19 +20,42 @@
       </div>
    </div>
    <div class="container">
-      <div id="paper">
+      <div class="row-fluid">
+         <div id="paper">
+         </div>
       </div>
-      <a id="loadImage" class="btn" href="#loadImageModal" data-toggle="modal">Load Image…</a>
-      <div id="loadImageModal" class="modal hide fade">
-         <div class="modal-header">Url please</div>
-         <div class="modal-body">
-             <label>Enter url below</label>
-             <input type="text" class="span3" placeholder="Url to image">
+      <div class="row-fluid">
+         <div class="span2">
+            <a id="loadImage" class="btn" href="#loadImageModal" data-toggle="modal">Load Image…</a>
          </div>
-         <div class="modal-footer">
-            <button type="submit" class="btn" data-dismiss="modal">Cancel</button>
-            <button id="loadImageSubmit" type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
+         <div class="span10 form-horizontal">
+            <label class="control-label">
+               Draw:</label>
+            <div class="btn-group inline controls" data-toggle="buttons-radio">
+               <button class="btn active">
+                  Line</button>
+               <button class="btn">
+                  Arrow</button>
+               <button class="btn">
+                  Text</button>
+            </div>
          </div>
+      </div>
+   </div>
+
+   <div id="loadImageModal" class="modal hide fade">
+      <div class="modal-header">
+         Url please</div>
+      <div class="modal-body">
+         <label>
+            Enter url below</label>
+         <input type="text" class="span3" placeholder="Url to image">
+      </div>
+      <div class="modal-footer">
+         <button type="submit" class="btn" data-dismiss="modal">
+            Cancel</button>
+         <button id="loadImageSubmit" type="submit" class="btn btn-primary" data-dismiss="modal">
+            Submit</button>
       </div>
    </div>
 </asp:Content>
@@ -49,7 +72,7 @@
             paper.text(x, y, 'you clicked here');
          };
 
-         drawing.receiveImage = function(url) {
+         drawing.receiveImage = function (url) {
             var image = paper.image(url, 0, 0, 500, 500);
             image.click(handlePaperClick);
          };
@@ -70,6 +93,8 @@
                var url = $(this).parent().siblings('.modal-body').children('input').val();
                drawing.sendImage(url);
             });
+
+            $('.btn-group').button();
          };
 
          return {
