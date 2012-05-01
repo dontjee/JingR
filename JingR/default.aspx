@@ -73,7 +73,7 @@
          var drawing = $.connection.drawingHub;
 
          drawing.drawIt = function (x, y) {
-            paper.text(x, y, 'you clicked here');
+            return paper.text(x, y, 'you clicked here');
          };
 
          drawing.receiveImage = function (url) {
@@ -82,11 +82,11 @@
          };
 
          drawing.receiveLine = function (x1, y1, x2, y2) {
-            paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
+            return paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
          };
 
          drawing.receiveArrow = function (x1, y1, x2, y2) {
-            paper.arrow(x1, y1, x2, y2, 12);
+            return paper.arrow(x1, y1, x2, y2, 12);
          };
 
 
@@ -106,22 +106,58 @@
          };
 
          var setupEvents = function () {
-            var clickBox = paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
-
-            var paperOffset = $('#paper').offset();
+            paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
+            var paperElement = $('#paper');
+            var paperOffset = paperElement.offset();
             var begin, end;
-            clickBox.mousedown(function (e) {
-               begin = {
-                  x: e.clientX - paperOffset.left,
-                  y: e.clientY - paperOffset.top
-               };
-            });
 
-            clickBox.mouseup(function (e) {
+            var previous;
+            var mouseMove = function (e) {
                end = {
                   x: e.clientX - paperOffset.left,
                   y: e.clientY - paperOffset.top
                };
+               if (previous) {
+                  if (previous.length) {
+                     previous[0].remove();
+                     previous[1].remove();
+                  } else {
+                     previous.remove();
+                  }
+               }
+
+               var selectedType = drawingTypeButtons.children('.active').data('type');
+               if (selectedType === 'line') {
+                  previous = drawing.receiveLine(begin.x, begin.y, end.x, end.y);
+               } else if (selectedType == 'arrow') {
+                  previous = drawing.receiveArrow(begin.x, begin.y, end.x, end.y);
+               } else if (selectedType === 'text') {
+                  previous = drawing.drawIt(end.x, end.y);
+               }
+            };
+
+            paperElement.mousedown(function (e) {
+               begin = {
+                  x: e.clientX - paperOffset.left,
+                  y: e.clientY - paperOffset.top
+               };
+
+               paperElement.mousemove(mouseMove);
+            });
+
+            paperElement.mouseup(function (e) {
+               end = {
+                  x: e.clientX - paperOffset.left,
+                  y: e.clientY - paperOffset.top
+               };
+
+               if (previous.length) {
+                  previous[0].remove();
+                  previous[1].remove();
+               } else {
+                  previous.remove();
+               }
+               paperElement.unbind('mousemove');
 
                handlePaperClick(begin, end);
             });
