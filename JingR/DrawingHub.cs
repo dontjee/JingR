@@ -4,9 +4,9 @@ namespace JingR
 {
    public class DrawingHub : Hub
    {
-      public void SendIt( int x, int y )
+      public void SendTextBox( int x1, int y1, int x2, int y2, string text )
       {
-         Clients.drawIt( x, y );
+         Clients.drawTextBox( x1, y1, x2, y2, text );
       }
 
       public void SendImage( string url )

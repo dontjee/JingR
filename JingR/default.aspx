@@ -72,8 +72,29 @@
          var paper;
          var drawing = $.connection.drawingHub;
 
-         drawing.drawIt = function (x, y) {
-            return paper.text(x, y, 'you clicked here');
+         drawing.drawTextBox = function (x1, y1, x2, y2, text) {
+            var textArea = $('<textarea>');
+            textArea.val(text);
+
+            var paperElement = $('#paper');
+            paperElement.append(textArea);
+            textArea.css('position', 'absolute');
+
+            // assumes 1 < 2
+            var top = y1 > y2 ? y2 : y1;
+            var left = x1 > x2 ? x2 : x1;
+            var paperOffset = paperElement.offset();
+
+            textArea.css('left', left + paperOffset.left);
+            textArea.css('top', top + paperOffset.top);
+            var height = y2 > y1 ? y2 - y1 : y1 - y2;
+            height = height > 30 ? height : 30;
+            textArea.css('height', height);
+            var width = x2 > x1 ? x2 - x1 : x1 - x2;
+            width = width > 60 ? width : 60;
+            textArea.css('width', width);
+
+            return $(textArea);
          };
 
          drawing.receiveImage = function (url) {
@@ -101,7 +122,10 @@
             } else if (selectedType == 'arrow') {
                drawing.sendArrow(begin.x, begin.y, end.x, end.y);
             } else if (selectedType === 'text') {
-               drawing.sendIt(end.x, end.y);
+               var textBox = drawing.drawTextBox(begin.x, begin.y, end.x, end.y);
+               textBox.blur(function () {
+                  drawing.sendTextBox(begin.x, begin.y, end.x, end.y, $(this).val());
+               });
             }
          };
 
@@ -118,7 +142,7 @@
                   y: e.clientY - paperOffset.top
                };
                if (previous) {
-                  if (previous.length) {
+                  if (previous instanceof Array) {
                      previous[0].remove();
                      previous[1].remove();
                   } else {
@@ -132,11 +156,19 @@
                } else if (selectedType == 'arrow') {
                   previous = drawing.receiveArrow(begin.x, begin.y, end.x, end.y);
                } else if (selectedType === 'text') {
-                  previous = drawing.drawIt(end.x, end.y);
+                  previous = drawing.drawTextBox(begin.x, begin.y, end.x, end.y);
                }
             };
 
+            var clickIsTextarea = false;
             paperElement.mousedown(function (e) {
+               if ($(e.target).is('textarea')) {
+                  clickIsTextarea = true;
+                  return;
+               } else {
+                  clickIsTextarea = false;
+               }
+
                begin = {
                   x: e.clientX - paperOffset.left,
                   y: e.clientY - paperOffset.top
@@ -146,12 +178,15 @@
             });
 
             paperElement.mouseup(function (e) {
+               if (clickIsTextarea) {
+                  return;
+               }
                end = {
                   x: e.clientX - paperOffset.left,
                   y: e.clientY - paperOffset.top
                };
 
-               if (previous.length) {
+               if (previous instanceof Array) {
                   previous[0].remove();
                   previous[1].remove();
                } else {
