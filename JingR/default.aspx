@@ -2,6 +2,11 @@
    CodeBehind="default.aspx.cs" Inherits="JingR.Default" %>
 
 <asp:Content ID="head" ContentPlaceHolderID="head" runat="server">
+   <style>
+      textarea {
+      resize: none;
+    }
+   </style>
 </asp:Content>
 <asp:Content ID="body" ContentPlaceHolderID="Body" runat="server">
    <div class="navbar navbar-fixed-top">
@@ -21,7 +26,7 @@
    </div>
    <div class="container">
       <div class="row-fluid">
-         <div id="paper">
+         <div id="paper" style="width: 500px; height: 500px;">
          </div>
       </div>
       <div class="row-fluid">
