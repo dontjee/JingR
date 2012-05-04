@@ -16,53 +16,47 @@ namespace JingR.Modules
                            return Response.AsJson( _drawingRepository.GetDrawing( id ) );
                         };
 
-         Post["/{id}/line"] = parameters =>
+         Post["/{id}/{type}"] = parameters =>
                        {
                           string id = parameters.id;
-                          var line = this.Bind<Line>();
+                          string type = parameters.type;
 
-                          _drawingRepository.AddLineToDrawing( id, line );
+                          SaveDrawingElement( type, id );
 
-                          return "{ success : true }";
-                       };
-
-         Post["/{id}/arrow"] = parameters =>
-                       {
-                          string id = parameters.id;
-                          var arrow = this.Bind<Arrow>();
-
-                          _drawingRepository.AddArrowToDrawing( id, arrow );
-
-                          return "{ success : true }";
-                       };
-
-         Post["/{id}/text"] = parameters =>
-                       {
-                          string id = parameters.id;
-                          var text = this.Bind<Text>();
-
-                          _drawingRepository.AddTextToDrawing( id, text );
-
-                          return "{ success : true }";
-                       };
-         Post["/{id}/image"] = parameters =>
-                       {
-                          string id = parameters.id;
-                          var image = this.Bind<Image>();
-
-                          _drawingRepository.AddImageToDrawing( id, image );
 
                           return "{ success : true }";
                        };
       }
-   }
 
-   public class Image
-   {
-      public string Url
+      private void SaveDrawingElement( string type, string id )
       {
-         get;
-         set;
+         switch ( type )
+         {
+            case "line":
+            {
+               var line = this.Bind<Line>();
+               _drawingRepository.AddLineToDrawing( id, line );
+               break;
+            }
+            case "arrow":
+            {
+               var arrow = this.Bind<Arrow>();
+               _drawingRepository.AddArrowToDrawing( id, arrow );
+               break;
+            }
+            case "text":
+            {
+               var text = this.Bind<Text>();
+               _drawingRepository.AddTextToDrawing( id, text );
+               break;
+            }
+            case "image":
+            {
+               var image = this.Bind<Image>();
+               _drawingRepository.AddImageToDrawing( id, image );
+               break;
+            }
+         }
       }
    }
 }
