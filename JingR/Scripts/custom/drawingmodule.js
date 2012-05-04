@@ -27,16 +27,23 @@
 
    var receiveImage = function (url) {
       var image = paper.image(url, 0, 0, 500, 500);
-      //image.click(handlePaperClick);
       image.toBack();
    };
 
    var receiveLine = function (x1, y1, x2, y2) {
-      return paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
+      var p = paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
+      p.attr("stroke", "#F50062");
+      p.attr("stroke-width", "3");
+      return p;
    };
 
    var receiveArrow = function (x1, y1, x2, y2) {
-      return paper.arrow(x1, y1, x2, y2, 12);
+      var p = paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
+      p.attr("stroke", "#F50062");
+      p.attr("stroke-width", "3");
+      p.attr("arrow-end", "block -wide -wide");
+
+      return p;
    };
 
    var sendLine = function (x1, y1, x2, y2) {

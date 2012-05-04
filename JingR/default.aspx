@@ -63,7 +63,6 @@
 </asp:Content>
 <asp:Content ID="scripts" ContentPlaceHolderID="Scripts" runat="server">
    <script type="text/javascript" src="Scripts/raphael-min.js"></script>
-   <script src="Scripts/custom/raphael-extensions.js" type="text/javascript"></script>
    <script src="Scripts/custom/drawingmodule.js" type="text/javascript"></script>
    <script type="text/javascript">
       $(function () {
