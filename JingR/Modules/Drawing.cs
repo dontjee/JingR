@@ -22,12 +22,25 @@ namespace JingR.Modules
          private set;
       }
 
+      public List<Text> Text
+      {
+         get;
+         private set;
+      }
+
+      public Image Image
+      {
+         get;
+         set;
+      }
+
       public Drawing( string id )
       {
          Id = id;
 
          Lines = new List<Line>();
          Arrows = new List<Arrow>();
+         Text = new List<Text>();
       }
    }
 }

@@ -13,7 +13,6 @@ namespace JingR.Modules
          drawing.Lines.Add( line );
       }
 
-
       public Drawing GetDrawing( string id )
       {
          return GetOrCreateDrawingForId( id );
@@ -23,6 +22,18 @@ namespace JingR.Modules
       {
          var drawing = GetOrCreateDrawingForId( id );
          drawing.Arrows.Add( arrow );
+      }
+
+      public void AddTextToDrawing( string id, Text text )
+      {
+         var drawing = GetOrCreateDrawingForId( id );
+         drawing.Text.Add( text );
+      }
+
+      public void AddImageToDrawing( string id, Image image )
+      {
+         var drawing = GetOrCreateDrawingForId( id );
+         drawing.Image = image;
       }
 
       private static Drawing GetOrCreateDrawingForId( string id )

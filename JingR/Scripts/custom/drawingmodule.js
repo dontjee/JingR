@@ -1,7 +1,7 @@
 ﻿var drawingModule = (function () {
    var paper, id;
 
-   var drawTextBox = function (x1, y1, x2, y2, text) {
+   var receiveTextBox = function (x1, y1, x2, y2, text) {
       var textArea = $('<textarea>');
       textArea.val(text);
 
@@ -27,7 +27,8 @@
 
    var receiveImage = function (url) {
       var image = paper.image(url, 0, 0, 500, 500);
-      image.click(handlePaperClick);
+      //image.click(handlePaperClick);
+      image.toBack();
    };
 
    var receiveLine = function (x1, y1, x2, y2) {
@@ -52,6 +53,22 @@
       });
    };
 
+   var sendTextBox = function (x1, y1, x2, y2, text) {
+      receiveTextBox(x1, y1, x2, y2, text);
+
+      $.post('/api/' + id + '/text', { x1: x1, y1: y1, x2: x2, y2: y2, value: text }, function (data) {
+         alert('saved text');
+      });
+   };
+
+   var sendImage = function (url) {
+      receiveTextBox(receiveImage(url));
+
+      $.post('/api/' + id + '/image', { url: url }, function (data) {
+         alert('saved image');
+      });
+   };
+
    var drawingTypeButtons = $('#drawingType');
    var handlePaperClick = function (begin, end) {
       var selectedType = drawingTypeButtons.children('.active').data('type');
@@ -61,7 +78,7 @@
       } else if (selectedType == 'arrow') {
          sendArrow(begin.x, begin.y, end.x, end.y);
       } else if (selectedType === 'text') {
-         var textBox = drawTextBox(begin.x, begin.y, end.x, end.y);
+         var textBox = receiveTextBox(begin.x, begin.y, end.x, end.y);
          textBox.blur(function () {
             sendTextBox(begin.x, begin.y, end.x, end.y, $(this).val());
          });
@@ -79,6 +96,15 @@
          for (i in data.Arrows) {
             var arrow = data.Arrows[i];
             receiveArrow(arrow.X1, arrow.Y1, arrow.X2, arrow.Y2);
+         }
+
+         for (i in data.Text) {
+            var text = data.Text[i];
+            receiveTextBox(text.X1, text.Y1, text.X2, text.Y2, text.Value);
+         }
+
+         if (data.Image) {
+            receiveImage(data.Image.Url);
          }
       });
    };
@@ -110,7 +136,7 @@
          } else if (selectedType == 'arrow') {
             previous = receiveArrow(begin.x, begin.y, end.x, end.y);
          } else if (selectedType === 'text') {
-            previous = drawTextBox(begin.x, begin.y, end.x, end.y);
+            previous = receiveTextBox(begin.x, begin.y, end.x, end.y);
          }
       };
 

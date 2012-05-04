@@ -35,6 +35,34 @@ namespace JingR.Modules
 
                           return "{ success : true }";
                        };
+
+         Post["/{id}/text"] = parameters =>
+                       {
+                          string id = parameters.id;
+                          var text = this.Bind<Text>();
+
+                          _drawingRepository.AddTextToDrawing( id, text );
+
+                          return "{ success : true }";
+                       };
+         Post["/{id}/image"] = parameters =>
+                       {
+                          string id = parameters.id;
+                          var image = this.Bind<Image>();
+
+                          _drawingRepository.AddImageToDrawing( id, image );
+
+                          return "{ success : true }";
+                       };
+      }
+   }
+
+   public class Image
+   {
+      public string Url
+      {
+         get;
+         set;
       }
    }
 }
