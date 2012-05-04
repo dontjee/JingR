@@ -128,13 +128,8 @@
             x: e.clientX - paperOffset.left,
             y: e.clientY - paperOffset.top
          };
-         if (previous) {
-            if (previous instanceof Array) {
-               previous[0].remove();
-               previous[1].remove();
-            } else {
-               previous.remove();
-            }
+         if(previous) {
+            previous.remove();
          }
 
          var selectedType = drawingTypeButtons.children('.active').data('type');
@@ -173,12 +168,7 @@
             y: e.clientY - paperOffset.top
          };
 
-         if (previous instanceof Array) {
-            previous[0].remove();
-            previous[1].remove();
-         } else {
-            previous.remove();
-         }
+         previous.remove();
          paperElement.unbind('mousemove');
 
          handlePaperClick(begin, end);
