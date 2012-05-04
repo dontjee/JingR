@@ -45,6 +45,13 @@
       });
    };
 
+   var sendArrow = function (x1, y1, x2, y2) {
+      receiveArrow(x1, y1, x2, y2);
+      $.post('/api/' + id + '/arrow', { x1: x1, y1: y1, x2: x2, y2: y2 }, function (data) {
+         alert('saved arrow');
+      });
+   };
+
    var drawingTypeButtons = $('#drawingType');
    var handlePaperClick = function (begin, end) {
       var selectedType = drawingTypeButtons.children('.active').data('type');
@@ -67,6 +74,11 @@
          for (i in data.Lines) {
             var line = data.Lines[i];
             receiveLine(line.X1, line.Y1, line.X2, line.Y2);
+         }
+
+         for (i in data.Arrows) {
+            var arrow = data.Arrows[i];
+            receiveArrow(arrow.X1, arrow.Y1, arrow.X2, arrow.Y2);
          }
       });
    };

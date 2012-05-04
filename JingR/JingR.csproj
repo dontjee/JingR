@@ -103,6 +103,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Modules\ApiModule.cs" />
+    <Compile Include="Modules\Arrow.cs" />
     <Compile Include="Modules\Drawing.cs" />
     <Compile Include="Modules\DrawingRepository.cs" />
     <Compile Include="Modules\Line.cs" />

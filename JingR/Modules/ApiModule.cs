@@ -25,6 +25,16 @@ namespace JingR.Modules
 
                           return "{ success : true }";
                        };
+
+         Post["/{id}/arrow"] = parameters =>
+                       {
+                          string id = parameters.id;
+                          var arrow = this.Bind<Arrow>();
+
+                          _drawingRepository.AddArrowToDrawing( id, arrow );
+
+                          return "{ success : true }";
+                       };
       }
    }
 }
