@@ -36,24 +36,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-      <HintPath>packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
     <Reference Include="Nancy">
       <HintPath>packages\Nancy.0.10.0\lib\net40\Nancy.dll</HintPath>
     </Reference>
     <Reference Include="Nancy.Hosting.Aspnet">
       <HintPath>packages\Nancy.Hosting.Aspnet.0.10.0\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SignalR">
-      <HintPath>packages\SignalR.Server.0.4.0.0\lib\net40\SignalR.dll</HintPath>
-    </Reference>
-    <Reference Include="SignalR.Hosting.AspNet">
-      <HintPath>packages\SignalR.Hosting.AspNet.0.4.0.0\lib\net40\SignalR.Hosting.AspNet.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -87,8 +74,6 @@
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.2.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
-    <Content Include="Scripts\jquery.signalR.js" />
-    <Content Include="Scripts\jquery.signalR.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\raphael-min.js" />
     <Content Include="Web.config" />
@@ -114,11 +99,13 @@
     <Compile Include="default.aspx.designer.cs">
       <DependentUpon>default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="DrawingHub.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Modules\JingRModule.cs" />
+    <Compile Include="Modules\ApiModule.cs" />
+    <Compile Include="Modules\Drawing.cs" />
+    <Compile Include="Modules\DrawingRepository.cs" />
+    <Compile Include="Modules\Line.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

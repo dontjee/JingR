@@ -1,142 +1,158 @@
 ﻿var drawingModule = (function () {
- var paper;
+   var paper, id;
 
- var drawing = $.connection.drawingHub;
- $.connection.hub.start();
+   var drawTextBox = function (x1, y1, x2, y2, text) {
+      var textArea = $('<textarea>');
+      textArea.val(text);
 
- drawing.drawTextBox = function (x1, y1, x2, y2, text) {
-    var textArea = $('<textarea>');
-    textArea.val(text);
+      var paperElement = $('#paper');
+      paperElement.append(textArea);
+      textArea.css('position', 'absolute');
 
-    var paperElement = $('#paper');
-    paperElement.append(textArea);
-    textArea.css('position', 'absolute');
+      var top = y1 > y2 ? y2 : y1;
+      var left = x1 > x2 ? x2 : x1;
+      var paperOffset = paperElement.offset();
 
-    var top = y1 > y2 ? y2 : y1;
-    var left = x1 > x2 ? x2 : x1;
-    var paperOffset = paperElement.offset();
+      textArea.css('left', left + paperOffset.left);
+      textArea.css('top', top + paperOffset.top);
+      var height = y2 > y1 ? y2 - y1 : y1 - y2;
+      height = height > 30 ? height : 30;
+      textArea.css('height', height);
+      var width = x2 > x1 ? x2 - x1 : x1 - x2;
+      width = width > 60 ? width : 60;
+      textArea.css('width', width);
 
-    textArea.css('left', left + paperOffset.left);
-    textArea.css('top', top + paperOffset.top);
-    var height = y2 > y1 ? y2 - y1 : y1 - y2;
-    height = height > 30 ? height : 30;
-    textArea.css('height', height);
-    var width = x2 > x1 ? x2 - x1 : x1 - x2;
-    width = width > 60 ? width : 60;
-    textArea.css('width', width);
+      return $(textArea);
+   };
 
-    return $(textArea);
- };
+   var receiveImage = function (url) {
+      var image = paper.image(url, 0, 0, 500, 500);
+      image.click(handlePaperClick);
+   };
 
- drawing.receiveImage = function (url) {
-    var image = paper.image(url, 0, 0, 500, 500);
-    image.click(handlePaperClick);
- };
+   var receiveLine = function (x1, y1, x2, y2) {
+      return paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
+   };
 
- drawing.receiveLine = function (x1, y1, x2, y2) {
-    return paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
- };
+   var receiveArrow = function (x1, y1, x2, y2) {
+      return paper.arrow(x1, y1, x2, y2, 12);
+   };
 
- drawing.receiveArrow = function (x1, y1, x2, y2) {
-    return paper.arrow(x1, y1, x2, y2, 12);
- };
+   var sendLine = function (x1, y1, x2, y2) {
+      receiveLine(x1, y1, x2, y2);
+      $.post('/api/' + id + '/line', { x1: x1, y1: y1, x2: x2, y2: y2 }, function (data) {
+         alert('saved line');
+      });
+   };
 
- var drawingTypeButtons = $('#drawingType');
- var handlePaperClick = function (begin, end) {
-    var selectedType = drawingTypeButtons.children('.active').data('type');
+   var drawingTypeButtons = $('#drawingType');
+   var handlePaperClick = function (begin, end) {
+      var selectedType = drawingTypeButtons.children('.active').data('type');
 
-    if (selectedType === 'line') {
-       drawing.sendLine(begin.x, begin.y, end.x, end.y);
-    } else if (selectedType == 'arrow') {
-       drawing.sendArrow(begin.x, begin.y, end.x, end.y);
-    } else if (selectedType === 'text') {
-       var textBox = drawing.drawTextBox(begin.x, begin.y, end.x, end.y);
-       textBox.blur(function () {
-          drawing.sendTextBox(begin.x, begin.y, end.x, end.y, $(this).val());
-       });
-    }
- };
+      if (selectedType === 'line') {
+         sendLine(begin.x, begin.y, end.x, end.y);
+      } else if (selectedType == 'arrow') {
+         sendArrow(begin.x, begin.y, end.x, end.y);
+      } else if (selectedType === 'text') {
+         var textBox = drawTextBox(begin.x, begin.y, end.x, end.y);
+         textBox.blur(function () {
+            sendTextBox(begin.x, begin.y, end.x, end.y, $(this).val());
+         });
+      }
+   };
 
- var setupEvents = function () {
-    paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
-    var paperElement = $('#paper');
-    var paperOffset = paperElement.offset();
-    var begin, end;
+   var getDrawing = function () {
+      $.get('/api/' + id, {}, function (data) {
+         var i;
+         for (i in data.Lines) {
+            var line = data.Lines[i];
+            receiveLine(line.X1, line.Y1, line.X2, line.Y2);
+         }
+      });
+   };
 
-    var previous;
-    var mouseMove = function (e) {
-       end = {
-          x: e.clientX - paperOffset.left,
-          y: e.clientY - paperOffset.top
-       };
-       if (previous) {
-          if (previous instanceof Array) {
-             previous[0].remove();
-             previous[1].remove();
-          } else {
-             previous.remove();
-          }
-       }
+   var setupEvents = function () {
+      paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
+      var paperElement = $('#paper');
+      var paperOffset = paperElement.offset();
+      var begin, end;
 
-       var selectedType = drawingTypeButtons.children('.active').data('type');
-       if (selectedType === 'line') {
-          previous = drawing.receiveLine(begin.x, begin.y, end.x, end.y);
-       } else if (selectedType == 'arrow') {
-          previous = drawing.receiveArrow(begin.x, begin.y, end.x, end.y);
-       } else if (selectedType === 'text') {
-          previous = drawing.drawTextBox(begin.x, begin.y, end.x, end.y);
-       }
-    };
+      var previous;
+      var mouseMove = function (e) {
+         end = {
+            x: e.clientX - paperOffset.left,
+            y: e.clientY - paperOffset.top
+         };
+         if (previous) {
+            if (previous instanceof Array) {
+               previous[0].remove();
+               previous[1].remove();
+            } else {
+               previous.remove();
+            }
+         }
 
-    var clickIsTextarea = false;
-    paperElement.mousedown(function (e) {
-       if ($(e.target).is('textarea')) {
-          clickIsTextarea = true;
-          return;
-       } else {
-          clickIsTextarea = false;
-       }
+         var selectedType = drawingTypeButtons.children('.active').data('type');
+         if (selectedType === 'line') {
+            previous = receiveLine(begin.x, begin.y, end.x, end.y);
+         } else if (selectedType == 'arrow') {
+            previous = receiveArrow(begin.x, begin.y, end.x, end.y);
+         } else if (selectedType === 'text') {
+            previous = drawTextBox(begin.x, begin.y, end.x, end.y);
+         }
+      };
 
-       begin = {
-          x: e.clientX - paperOffset.left,
-          y: e.clientY - paperOffset.top
-       };
+      var clickIsTextarea = false;
+      paperElement.mousedown(function (e) {
+         if ($(e.target).is('textarea')) {
+            clickIsTextarea = true;
+            return;
+         } else {
+            clickIsTextarea = false;
+         }
 
-       paperElement.mousemove(mouseMove);
-    });
+         begin = {
+            x: e.clientX - paperOffset.left,
+            y: e.clientY - paperOffset.top
+         };
 
-    paperElement.mouseup(function (e) {
-       if (clickIsTextarea) {
-          return;
-       }
-       end = {
-          x: e.clientX - paperOffset.left,
-          y: e.clientY - paperOffset.top
-       };
+         paperElement.mousemove(mouseMove);
+      });
 
-       if (previous instanceof Array) {
-          previous[0].remove();
-          previous[1].remove();
-       } else {
-          previous.remove();
-       }
-       paperElement.unbind('mousemove');
+      paperElement.mouseup(function (e) {
+         if (clickIsTextarea) {
+            return;
+         }
+         end = {
+            x: e.clientX - paperOffset.left,
+            y: e.clientY - paperOffset.top
+         };
 
-       handlePaperClick(begin, end);
-    });
+         if (previous instanceof Array) {
+            previous[0].remove();
+            previous[1].remove();
+         } else {
+            previous.remove();
+         }
+         paperElement.unbind('mousemove');
 
-    $('#loadImageSubmit').click(function () {
-       var url = $(this).parent().siblings('.modal-body').children('input').val();
-       drawing.sendImage(url);
-    });
+         handlePaperClick(begin, end);
+      });
 
-    $('.btn-group').button();
- };
+      $('#loadImageSubmit').click(function () {
+         var url = $(this).parent().siblings('.modal-body').children('input').val();
+         sendImage(url);
+      });
 
- return {
-    init: function (paperIn) {
-       paper = paperIn;
-       setupEvents();
-    }
- };
+      $('.btn-group').button();
+   };
+
+   return {
+      init: function (paperIn, idIn) {
+         paper = paperIn;
+         id = idIn;
+         setupEvents();
+         getDrawing();
+      }
+   };
 })();
