@@ -62,16 +62,7 @@
 </asp:Content>
 <asp:Content ID="scripts" ContentPlaceHolderID="Scripts" runat="server">
    <script type="text/javascript" src="Scripts/raphael-min.js"></script>
-   <script src="Scripts/custom/drawingmodule.js" type="text/javascript"></script>
    <script src="Scripts/underscore-min.js" type="text/javascript"></script>
    <script src="Scripts/backbone-min.js" type="text/javascript"></script>
-   <script type="text/javascript">
-      $(function () {
-         var paper = Raphael("paper", 500, 500);
-
-         var id = '1234';
-
-         drawingModule.init(paper, id);
-      });
-   </script>
+   <script src="Scripts/custom/drawingmodule.backbone.js" type="text/javascript"></script>
 </asp:Content>
