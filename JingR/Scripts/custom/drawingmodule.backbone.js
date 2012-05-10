@@ -1,10 +1,8 @@
 ﻿(function ($) {
    var Line = Backbone.Model.extend({
       defaults: {
-         x1: 0,
-         y1: 0,
-         x2: 0,
-         y2: 0
+         begin: { x: 0, y: 0 },
+         end: { x: 0, y: 0 }
       }
    });
 
@@ -17,7 +15,7 @@
          _.bindAll(this, 'render', 'remove'); // every function that uses 'this' as the current object should be in here
       },
       render: function () {
-         var pathString = 'M' + this.model.attributes.x1 + ' ' + this.model.attributes.y1 + 'L' + this.model.attributes.x2 + ' ' + this.model.attributes.y2;
+         var pathString = 'M' + this.model.attributes.begin.x + ' ' + this.model.attributes.begin.y + 'L' + this.model.attributes.end.x + ' ' + this.model.attributes.end.y;
          this.path = this.options.paper.path(pathString);
          this.path.attr("stroke", "#F50062");
          this.path.attr("stroke-width", "3");
@@ -88,16 +86,12 @@
          if (selectedType === 'line') {
             var line = new Line();
             line.set({
-               x1: this.begin.x,
-               y1: this.begin.y,
-               x2: end.x,
-               y2: end.y
+               begin : this.begin,
+               end : end
             });
             this.previous = this.addLine(line);
          } else if (selectedType == 'arrow') {
-            //this.previous = receiveArrow(begin.x, begin.y, end.x, end.y);
          } else if (selectedType === 'text') {
-            //this.previous = receiveTextBox(begin.x, begin.y, end.x, end.y);
          }
       },
       mouseUp: function (e) {
@@ -116,10 +110,8 @@
          };
          var line = new Line();
          line.set({
-            x1: this.begin.x,
-            y1: this.begin.y,
-            x2: end.x,
-            y2: end.y
+            begin: this.begin,
+            end: end
          });
 
          this.collection.add(line);
