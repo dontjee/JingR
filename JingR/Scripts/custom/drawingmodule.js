@@ -30,13 +30,6 @@
       image.toBack();
    };
 
-   var receiveLine = function (x1, y1, x2, y2) {
-      var p = paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
-      p.attr("stroke", "#F50062");
-      p.attr("stroke-width", "3");
-      return p;
-   };
-
    var receiveArrow = function (x1, y1, x2, y2) {
       var p = paper.path('M' + x1 + ' ' + y1 + 'L' + x2 + ' ' + y2);
       p.attr("stroke", "#F50062");
@@ -44,13 +37,6 @@
       p.attr("arrow-end", "block -wide -wide");
 
       return p;
-   };
-
-   var sendLine = function (x1, y1, x2, y2) {
-      receiveLine(x1, y1, x2, y2);
-      $.post('/api/' + id + '/line', { x1: x1, y1: y1, x2: x2, y2: y2 }, function (data) {
-         alert('saved line');
-      });
    };
 
    var sendArrow = function (x1, y1, x2, y2) {
@@ -80,9 +66,7 @@
    var handlePaperClick = function (begin, end) {
       var selectedType = drawingTypeButtons.children('.active').data('type');
 
-      if (selectedType === 'line') {
-         sendLine(begin.x, begin.y, end.x, end.y);
-      } else if (selectedType == 'arrow') {
+      if (selectedType == 'arrow') {
          sendArrow(begin.x, begin.y, end.x, end.y);
       } else if (selectedType === 'text') {
          var textBox = receiveTextBox(begin.x, begin.y, end.x, end.y);
@@ -95,11 +79,6 @@
    var getDrawing = function () {
       $.get('/api/' + id, {}, function (data) {
          var i;
-         for (i in data.Lines) {
-            var line = data.Lines[i];
-            receiveLine(line.X1, line.Y1, line.X2, line.Y2);
-         }
-
          for (i in data.Arrows) {
             var arrow = data.Arrows[i];
             receiveArrow(arrow.X1, arrow.Y1, arrow.X2, arrow.Y2);
@@ -133,9 +112,7 @@
          }
 
          var selectedType = drawingTypeButtons.children('.active').data('type');
-         if (selectedType === 'line') {
-            previous = receiveLine(begin.x, begin.y, end.x, end.y);
-         } else if (selectedType == 'arrow') {
+         if (selectedType == 'arrow') {
             previous = receiveArrow(begin.x, begin.y, end.x, end.y);
          } else if (selectedType === 'text') {
             previous = receiveTextBox(begin.x, begin.y, end.x, end.y);

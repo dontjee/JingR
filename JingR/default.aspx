@@ -36,8 +36,7 @@
             <label class="control-label">
                Draw:</label>
             <div id="drawingType" class="btn-group inline controls" data-toggle="buttons-radio">
-               <button class="btn active" data-type="line">Line</button>
-               <button class="btn" data-type="arrow">Arrow</button>
+               <button class="btn active" data-type="arrow">Arrow</button>
                <button class="btn" data-type="text">Text</button>
             </div>
          </div>
