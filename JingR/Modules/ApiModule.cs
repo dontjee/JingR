@@ -16,6 +16,20 @@ namespace JingR.Modules
                            return Response.AsJson( _drawingRepository.GetDrawing( id ) );
                         };
 
+         Post["/{id}"] = parameters =>
+                        {
+                           string id = parameters.id;
+
+                           var image = this.Bind<Image>();
+
+                           _drawingRepository.AddImageToDrawing( id, image );
+
+                           return Response.AsJson( new
+                           {
+                              Success = true
+                           } );
+                        };
+
          Post["/{id}/{type}"] = parameters =>
                        {
                           string id = parameters.id;

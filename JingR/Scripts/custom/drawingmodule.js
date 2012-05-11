@@ -5,7 +5,7 @@
       var textArea = $('<textarea>');
       textArea.val(text);
 
-      var paperElement = $('#paper');
+      var paperElement = $('#js-paper');
       paperElement.append(textArea);
       textArea.css('position', 'absolute');
 
@@ -42,7 +42,6 @@
    var sendArrow = function (x1, y1, x2, y2) {
       receiveArrow(x1, y1, x2, y2);
       $.post('/api/' + id + '/arrow', { x1: x1, y1: y1, x2: x2, y2: y2 }, function (data) {
-         alert('saved arrow');
       });
    };
 
@@ -50,15 +49,13 @@
       receiveTextBox(x1, y1, x2, y2, text);
 
       $.post('/api/' + id + '/text', { x1: x1, y1: y1, x2: x2, y2: y2, value: text }, function (data) {
-         alert('saved text');
       });
    };
 
    var sendImage = function (url) {
-      receiveTextBox(receiveImage(url));
+      receiveImage(url);
 
-      $.post('/api/' + id + '/image', { url: url }, function (data) {
-         alert('saved image');
+      $.post('/api/' + id, { url: url }, function (data) {
       });
    };
 
@@ -77,6 +74,10 @@
    };
 
    var getDrawing = function () {
+      $('#js-paper').show();
+      $('#js-buttons').show();
+      $('js-loadImage').hide();
+
       $.get('/api/' + id, {}, function (data) {
          var i;
          for (i in data.Arrows) {
@@ -97,7 +98,7 @@
 
    var setupEvents = function () {
       paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
-      var paperElement = $('#paper');
+      var paperElement = $('#js-paper');
       var paperOffset = paperElement.offset();
       var begin, end;
 
@@ -107,7 +108,7 @@
             x: e.clientX - paperOffset.left,
             y: e.clientY - paperOffset.top
          };
-         if(previous) {
+         if (previous) {
             previous.remove();
          }
 
@@ -151,20 +152,29 @@
          handlePaperClick(begin, end);
       });
 
-      $('#loadImageSubmit').click(function () {
-         var url = $(this).parent().siblings('.modal-body').children('input').val();
-         sendImage(url);
-      });
 
       $('.btn-group').button();
+
+      $('#loadImageSubmit').click(function () {
+         var max = 99999, min = 1;
+         id = Math.floor(Math.random() * (max - min + 1)) + min;
+         window.location.hash = id;
+
+         var url = $(this).parent().siblings('.modal-body').children('input').val();
+         sendImage(url);
+         getDrawing();
+      });
+
    };
 
    return {
-      init: function (paperIn, idIn) {
+      init: function (paperIn) {
          paper = paperIn;
-         id = idIn;
+         if (window.location.hash) {
+            id = window.location.hash.substr(1);
+            getDrawing();
+         }
          setupEvents();
-         getDrawing();
       }
    };
 })();

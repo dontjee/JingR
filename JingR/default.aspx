@@ -2,11 +2,7 @@
    CodeBehind="default.aspx.cs" Inherits="JingR.Default" %>
 
 <asp:Content ID="head" ContentPlaceHolderID="head" runat="server">
-   <style>
-      textarea {
-      resize: none;
-    }
-   </style>
+   <link href="Content/jingr.css" rel="stylesheet" type="text/css" />
 </asp:Content>
 <asp:Content ID="body" ContentPlaceHolderID="Body" runat="server">
    <div class="navbar navbar-fixed-top">
@@ -25,14 +21,14 @@
    </div>
    <div class="container">
       <div class="row-fluid">
-         <div id="paper" style="width: 500px; height: 500px;">
+         <div id="js-paper" style="width: 500px; height: 500px;">
          </div>
       </div>
       <div class="row-fluid">
          <div class="span2">
-            <a id="loadImage" class="btn" href="#loadImageModal" data-toggle="modal">Load Image…</a>
+            <a id="js-loadImage" class="btn" href="#loadImageModal" data-toggle="modal">Load Image…</a>
          </div>
-         <div class="span10 form-horizontal">
+         <div id="js-buttons" class="span10 form-horizontal">
             <label class="control-label">
                Draw:</label>
             <div id="drawingType" class="btn-group inline controls" data-toggle="buttons-radio">
@@ -64,11 +60,9 @@
    <script src="Scripts/custom/drawingmodule.js" type="text/javascript"></script>
    <script type="text/javascript">
       $(function () {
-         var paper = Raphael("paper", 500, 500);
+         var paper = Raphael("js-paper", 500, 500);
 
-         var id = '1234';
-
-         drawingModule.init(paper, id);
+         drawingModule.init(paper);
       });
    </script>
 </asp:Content>
