@@ -95,6 +95,9 @@
       }
    });
 
+   var PaperModel = Backbone.Model.extend({
+   });
+
    var PaperView = Backbone.View.extend({
       el: $('#js-paper'),
       events: {
@@ -103,6 +106,8 @@
          'mouseup': 'mouseUp'
       },
       initialize: function () {
+         window.location.hash = this.model.attributes.id;
+
          _.bindAll(this, 'render', 'mouseDown', 'mouseMove', 'mouseUp', 'setEndpointOfDrawing', 'addArrow', 'addTextbox'); // every function that uses 'this' as the current object should be in here
 
          $(this.el).show();
@@ -115,7 +120,7 @@
          this.textboxes.bind('add', this.addTextbox);
 
          this.paper = Raphael("js-paper", 500, 500);
-         var image = this.paper.image(this.options.url, 0, 0, 500, 500);
+         var image = this.paper.image(this.model.attributes.imageUrl, 0, 0, 500, 500);
          image.toBack();
 
          this.paperOffset = $(this.el).offset();
@@ -223,7 +228,16 @@
       },
       submitClick: function () {
          var url = $(this.el).find('input').val();
-         window.paperView = new PaperView({ url: url });
+
+         var max = 99999, min = 1;
+         var id = Math.floor(Math.random() * (max - min + 1)) + min;
+
+         var paper = new PaperModel({
+            id: id,
+            imageUrl: url
+         });
+         window.paperView = new PaperView({ model: paper });
+
          this.remove();
       },
       remove: function () {
