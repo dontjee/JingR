@@ -44,7 +44,7 @@
 
    var TextboxView = Backbone.View.extend({
       initialize: function () {
-         _.bindAll(this, 'render', 'modelChange'); // every function that uses 'this' as the current object should be in here
+         _.bindAll(this, 'render', 'modelChange', 'blur'); // every function that uses 'this' as the current object should be in here
 
          this.model.on('change:end', this.modelChange);
       },
@@ -54,6 +54,8 @@
       },
       render: function () {
          this.textbox = $('<textarea>');
+         this.textbox.blur(this.blur);
+         this.textbox.val(this.model.attributes.value);
 
          var parentElement = $(this.options.parentElement);
 
@@ -81,6 +83,10 @@
          this.textbox.css('width', width);
 
          return this; // for chainable calls, like .render().el
+      },
+      blur: function () {
+         this.model.set('value', this.textbox.val());
+         this.model.save();
       }
    });
 

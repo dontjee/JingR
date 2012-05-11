@@ -79,6 +79,35 @@ namespace JingR.Modules
                              success = false
                           } );
                        };
+
+         Put["/{drawingId}/{type}/{id}"] = parameters =>
+                       {
+                          string drawingId = parameters.drawingId;
+                          string id = parameters.id;
+                          string type = parameters.type;
+
+                          switch ( type )
+                          {
+                             case "arrows":
+                             {
+                                var modifiedArrow = this.Bind<Arrow>();
+                                _drawingRepository.UpdateArrow( drawingId, id, modifiedArrow );
+
+                                return Response.AsJson( modifiedArrow );
+                             }
+                             case "textboxes":
+                             {
+                                var modifiedTextBox = this.Bind<Text>();
+                                _drawingRepository.UpdateTextBox( drawingId, id, modifiedTextBox );
+                                return Response.AsJson( modifiedTextBox );
+                             }
+                          }
+
+                          return Response.AsJson( new
+                          {
+                             success = false
+                          } );
+                       };
       }
    }
 }

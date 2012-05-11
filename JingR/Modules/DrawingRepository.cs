@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace JingR.Modules
 {
@@ -38,6 +39,29 @@ namespace JingR.Modules
 
          Drawing drawing = _drawings[id];
          return drawing;
+      }
+
+      public void UpdateArrow( string drawingId, string id, Arrow modifiedArrow )
+      {
+         var drawing = GetDrawing( drawingId );
+         var existingArrow = drawing.Arrows.FirstOrDefault( a => a.id == id );
+         if ( existingArrow != null )
+         {
+            existingArrow.begin = modifiedArrow.begin;
+            existingArrow.end = modifiedArrow.end;
+         }
+      }
+
+      public void UpdateTextBox( string drawingId, string id, Text modifiedTextbox )
+      {
+         var drawing = GetDrawing( drawingId );
+         var existingTextbox = drawing.Text.FirstOrDefault( t => t.id == id );
+         if ( existingTextbox != null )
+         {
+            existingTextbox.begin = modifiedTextbox.begin;
+            existingTextbox.end = modifiedTextbox.end;
+            existingTextbox.value = modifiedTextbox.value;
+         }
       }
    }
 }

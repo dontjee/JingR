@@ -14,7 +14,7 @@ namespace JingR.Modules
          set;
       }
 
-      public string Value
+      public string value
       {
          get;
          set;
