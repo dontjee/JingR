@@ -1,4 +1,5 @@
-﻿using Nancy;
+﻿using System;
+using Nancy;
 using Nancy.ModelBinding;
 
 namespace JingR.Modules
@@ -55,30 +56,29 @@ namespace JingR.Modules
                           string id = parameters.id;
                           string type = parameters.type;
 
-                          SaveDrawingElement( type, id );
+                          switch ( type )
+                          {
+                             case "arrows":
+                             {
+                                var arrow = this.Bind<Arrow>();
+                                arrow.id = Guid.NewGuid().ToString();
+                                _drawingRepository.AddArrowToDrawing( id, arrow );
+                                return Response.AsJson( arrow );
+                             }
+                             case "textboxes":
+                             {
+                                var text = this.Bind<Text>();
+                                text.id = Guid.NewGuid().ToString();
+                                _drawingRepository.AddTextToDrawing( id, text );
+                                return Response.AsJson( text );
+                             }
+                          }
 
-
-                          return "{ success : true }";
+                          return Response.AsJson( new
+                          {
+                             success = false
+                          } );
                        };
-      }
-
-      private void SaveDrawingElement( string type, string id )
-      {
-         switch ( type )
-         {
-            case "arrows":
-            {
-               var arrow = this.Bind<Arrow>();
-               _drawingRepository.AddArrowToDrawing( id, arrow );
-               break;
-            }
-            case "textboxes":
-            {
-               var text = this.Bind<Text>();
-               _drawingRepository.AddTextToDrawing( id, text );
-               break;
-            }
-         }
       }
    }
 }

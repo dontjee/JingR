@@ -13,5 +13,11 @@ namespace JingR.Modules
          get;
          set;
       }
+
+      public string id
+      {
+         get;
+         set;
+      }
    }
 }
