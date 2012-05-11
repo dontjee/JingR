@@ -1,16 +1,16 @@
 ﻿(function ($) {
-   var Line = Backbone.Model.extend({
+   var Arrow = Backbone.Model.extend({
       defaults: {
          begin: { x: 0, y: 0 },
          end: { x: 0, y: 0 }
       }
    });
 
-   var LineCollection = Backbone.Collection.extend({
-      model: Line
+   var ArrowCollection = Backbone.Collection.extend({
+      model: Arrow
    });
 
-   var LineView = Backbone.View.extend({
+   var ArrowView = Backbone.View.extend({
       initialize: function () {
          _.bindAll(this, 'render', 'modelChange'); // every function that uses 'this' as the current object should be in here
 
@@ -25,6 +25,7 @@
          this.path = this.options.paper.path(pathString);
          this.path.attr("stroke", "#F50062");
          this.path.attr("stroke-width", "3");
+         this.path.attr("arrow-end", "block -wide -wide");
 
          return this; // for chainable calls, like .render().el
       }
@@ -38,10 +39,10 @@
          'mouseup': 'mouseUp'
       },
       initialize: function () {
-         _.bindAll(this, 'render', 'mouseDown', 'mouseMove', 'mouseUp', 'setEndpointOfDrawing', 'addLine'); // every function that uses 'this' as the current object should be in here
+         _.bindAll(this, 'render', 'mouseDown', 'mouseMove', 'mouseUp', 'setEndpointOfDrawing', 'addArrow'); // every function that uses 'this' as the current object should be in here
 
-         this.lineCollection = new LineCollection();
-         this.lineCollection.bind('add', this.addLine); // collection event binder
+         this.arrows = new ArrowCollection();
+         this.arrows.bind('add', this.addArrow); // collection event binder
 
          this.paper = Raphael("paper", 500, 500);
          this.paperOffset = $(this.el).offset();
@@ -52,8 +53,8 @@
          this.paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
 
          var self = this;
-         _(this.lineCollection.models).each(function (line) {
-            self.addLine(line);
+         _(this.arrows.models).each(function (arrow) {
+            self.addArrow(arrow);
          }, this);
       },
       mouseDown: function (e) {
@@ -69,13 +70,13 @@
             x: e.clientX - this.paperOffset.left,
             y: e.clientY - this.paperOffset.top
          };
-         this.drawing = new Line();
+         this.drawing = new Arrow();
          this.drawing.set({
             begin: begin,
             end: begin
          });
 
-         this.lineCollection.add(this.drawing);
+         this.arrows.add(this.drawing);
       },
       mouseMove: function (e) {
          if (!this.isDragging) {
@@ -102,13 +103,13 @@
             end: end
          });
       },
-      addLine: function (line) {
+      addArrow: function (arrow) {
          var self = this;
-         var lineView = new LineView({
-            model: line,
+         var arrowView = new ArrowView({
+            model: arrow,
             paper: self.paper
          });
-         return lineView.render();
+         return arrowView.render();
       }
    });
 
