@@ -1,14 +1,14 @@
 namespace JingR.Modules
 {
-   public class Arrow
+   public class Point
    {
-      public Point begin
+      public int x
       {
          get;
          set;
       }
 
-      public Point end
+      public int y
       {
          get;
          set;

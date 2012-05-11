@@ -65,6 +65,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\jingr.css" />
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\backbone-min.js" />
@@ -109,6 +110,7 @@
     <Compile Include="Modules\Drawing.cs" />
     <Compile Include="Modules\DrawingRepository.cs" />
     <Compile Include="Modules\Image.cs" />
+    <Compile Include="Modules\Point.cs" />
     <Compile Include="Modules\Text.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

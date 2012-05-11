@@ -2,7 +2,7 @@ namespace JingR.Modules
 {
    public class Image
    {
-      public string Url
+      public string imageUrl
       {
          get;
          set;

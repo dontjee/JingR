@@ -23,10 +23,10 @@ namespace JingR.Modules
          drawing.Text.Add( text );
       }
 
-      public void AddImageToDrawing( string id, Image image )
+      public void AddImageToDrawing( string id, string imageUrl )
       {
          var drawing = GetOrCreateDrawingForId( id );
-         drawing.Image = image;
+         drawing.imageUrl = imageUrl;
       }
 
       private static Drawing GetOrCreateDrawingForId( string id )

@@ -96,6 +96,7 @@
    });
 
    var PaperModel = Backbone.Model.extend({
+      urlRoot: '/api'
    });
 
    var PaperView = Backbone.View.extend({
@@ -114,9 +115,11 @@
          $('#js-buttons').show();
 
          this.arrows = new ArrowCollection();
+         this.arrows.url = '/api/' + this.model.attributes.id + '/arrows';
          this.arrows.bind('add', this.addArrow); // collection event binder
 
          this.textboxes = new TextboxCollection();
+         this.textboxes.url = '/api/' + this.model.attributes.id + '/textboxes';
          this.textboxes.bind('add', this.addTextbox);
 
          this.paper = Raphael("js-paper", 500, 500);
@@ -133,13 +136,21 @@
          this.paper.rect(0, 0, 500, 500).attr({ fill: 'blue', 'fill-opacity': 0 });
 
          var self = this;
-         _(this.arrows.models).each(function (arrow) {
-            self.addArrow(arrow);
-         }, this);
+         this.textboxes.fetch({
+            success: function () {
+               _(self.textboxes.models).each(function (textbox) {
+                  self.addTextbox(textbox);
+               }, self);
+            }
+         });
 
-         _(this.textboxes.models).each(function (textbox) {
-            self.addTextbox(textbox);
-         }, this);
+         this.arrows.fetch({
+            success: function () {
+               _(self.arrows.models).each(function (arrow) {
+                  self.addArrow(arrow);
+               }, self);
+            }
+         });
       },
       mouseDown: function (e) {
          this.isDragging = true;
@@ -188,6 +199,7 @@
          }
 
          this.setEndpointOfDrawing(e);
+         this.drawing.save();
       },
       setEndpointOfDrawing: function (e) {
          var end = {
@@ -225,6 +237,19 @@
       },
       initialize: function () {
          _.bindAll(this, 'submitClick', 'remove');
+
+         if (window.location.hash) {
+            var paper = new PaperModel({
+               id: window.location.hash.substr(1)
+            });
+
+            var self = this;
+            paper.fetch({
+               success: function () {
+                  self.loadPaperView(paper);
+               }
+            });
+         }
       },
       submitClick: function () {
          var url = $(this.el).find('input').val();
@@ -236,8 +261,12 @@
             id: id,
             imageUrl: url
          });
-         window.paperView = new PaperView({ model: paper });
+         paper.save();
 
+         this.loadPaperView(paper);
+      },
+      loadPaperView: function (paper) {
+         window.paperView = new PaperView({ model: paper });
          this.remove();
       },
       remove: function () {

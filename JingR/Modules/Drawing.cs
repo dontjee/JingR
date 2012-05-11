@@ -22,7 +22,7 @@ namespace JingR.Modules
          private set;
       }
 
-      public Image Image
+      public string imageUrl
       {
          get;
          set;
