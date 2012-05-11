@@ -71,8 +71,11 @@
     <Content Include="Scripts\backbone-min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\custom\drawingmodule.backbone.js" />
-    <Content Include="Scripts\custom\drawingmodule.js" />
+    <Content Include="Scripts\custom\drawingmodule.paper.js" />
+    <Content Include="Scripts\custom\drawingmodule.drawingbuttons.js" />
+    <Content Include="Scripts\custom\drawingmodule.textbox.js" />
+    <Content Include="Scripts\custom\drawingmodule.arrow.js" />
+    <Content Include="Scripts\custom\drawingmodule.main.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.2.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
