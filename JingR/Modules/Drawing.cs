@@ -10,12 +10,6 @@ namespace JingR.Modules
          private set;
       }
 
-      public List<Line> Lines
-      {
-         get;
-         private set;
-      }
-
       public List<Arrow> Arrows
       {
          get;
@@ -38,7 +32,6 @@ namespace JingR.Modules
       {
          Id = id;
 
-         Lines = new List<Line>();
          Arrows = new List<Arrow>();
          Text = new List<Text>();
       }

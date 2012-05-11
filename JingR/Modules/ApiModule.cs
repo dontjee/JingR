@@ -32,12 +32,6 @@ namespace JingR.Modules
       {
          switch ( type )
          {
-            case "line":
-            {
-               var line = this.Bind<Line>();
-               _drawingRepository.AddLineToDrawing( id, line );
-               break;
-            }
             case "arrow":
             {
                var arrow = this.Bind<Arrow>();

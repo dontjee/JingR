@@ -109,7 +109,6 @@
     <Compile Include="Modules\Drawing.cs" />
     <Compile Include="Modules\DrawingRepository.cs" />
     <Compile Include="Modules\Image.cs" />
-    <Compile Include="Modules\Line.cs" />
     <Compile Include="Modules\Text.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
