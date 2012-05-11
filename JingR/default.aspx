@@ -25,17 +25,17 @@
    </div>
    <div class="container">
       <div class="row-fluid">
-         <div id="paper" style="width: 500px; height: 500px;">
+         <div id="js-paper">
          </div>
       </div>
       <div class="row-fluid">
          <div class="span2">
-            <a id="loadImage" class="btn" href="#loadImageModal" data-toggle="modal">Load Image…</a>
+            <a id="js-loadImage" class="btn" href="#loadImageModal" data-toggle="modal">Load Image…</a>
          </div>
-         <div class="span10 form-horizontal">
+         <div id="js-buttons" class="span10 form-horizontal">
             <label class="control-label">
                Draw:</label>
-            <div id="drawingType" class="btn-group inline controls" data-toggle="buttons-radio">
+            <div id="js-drawingType" class="btn-group inline controls" data-toggle="buttons-radio">
                <button class="btn active" data-type="arrow">Arrow</button>
                <button class="btn" data-type="text">Text</button>
             </div>
@@ -54,7 +54,7 @@
       <div class="modal-footer">
          <button type="submit" class="btn" data-dismiss="modal">
             Cancel</button>
-         <button id="loadImageSubmit" type="submit" class="btn btn-primary" data-dismiss="modal">
+         <button id="js-loadImageSubmit" type="submit" class="btn btn-primary" data-dismiss="modal">
             Submit</button>
       </div>
    </div>

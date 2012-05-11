@@ -1,0 +1,9 @@
+﻿#js-buttons {
+   display: none;
+}
+
+#js-paper {
+   height: 500px;
+   width: 500px;
+   display: none;
+}

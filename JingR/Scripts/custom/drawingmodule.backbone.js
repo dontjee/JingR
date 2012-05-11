@@ -85,7 +85,7 @@
    });
 
    var DrawingButtonsView = Backbone.View.extend({
-      el: $('#drawingType'),
+      el: $('#js-drawingType'),
       initialize: function () {
          _.bindAll(this, 'getSelectedType');
       },
@@ -96,7 +96,7 @@
    });
 
    var PaperView = Backbone.View.extend({
-      el: $('#paper'),
+      el: $('#js-paper'),
       events: {
          'mousedown': 'mouseDown',
          'mousemove': 'mouseMove',
@@ -105,13 +105,19 @@
       initialize: function () {
          _.bindAll(this, 'render', 'mouseDown', 'mouseMove', 'mouseUp', 'setEndpointOfDrawing', 'addArrow', 'addTextbox'); // every function that uses 'this' as the current object should be in here
 
+         $(this.el).show();
+         $('#js-buttons').show();
+
          this.arrows = new ArrowCollection();
          this.arrows.bind('add', this.addArrow); // collection event binder
 
          this.textboxes = new TextboxCollection();
          this.textboxes.bind('add', this.addTextbox);
 
-         this.paper = Raphael("paper", 500, 500);
+         this.paper = Raphael("js-paper", 500, 500);
+         var image = this.paper.image(this.options.url, 0, 0, 500, 500);
+         image.toBack();
+
          this.paperOffset = $(this.el).offset();
 
          this.drawingButtons = new DrawingButtonsView();
@@ -207,5 +213,24 @@
       }
    });
 
-   var paperView = new PaperView();
+   var MainView = Backbone.View.extend({
+      el: $('#loadImageModal'),
+      events: {
+         'click #js-loadImageSubmit': 'submitClick'
+      },
+      initialize: function () {
+         _.bindAll(this, 'submitClick', 'remove');
+      },
+      submitClick: function () {
+         var url = $(this.el).find('input').val();
+         window.paperView = new PaperView({ url: url });
+         this.remove();
+      },
+      remove: function () {
+         $('#js-loadImage').remove();
+         $(this.el).remove();
+      }
+   });
+
+   var mainView = new MainView();
 })(jQuery);
