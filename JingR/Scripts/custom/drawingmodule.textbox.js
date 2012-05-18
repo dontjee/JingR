@@ -17,6 +17,7 @@
          _.bindAll(this, 'render', 'modelChange', 'blur'); // every function that uses 'this' as the current object should be in here
 
          this.model.on('change:end', this.modelChange);
+         this.model.on('change:value', this.modelChange);
       },
       modelChange: function () {
          this.textbox.remove();

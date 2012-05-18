@@ -42,6 +42,12 @@
     <Reference Include="Nancy.Hosting.Aspnet">
       <HintPath>packages\Nancy.Hosting.Aspnet.0.10.0\lib\net40\Nancy.Hosting.Aspnet.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PusherRESTDotNet">
+      <HintPath>packages\PusherRESTDotNet.1.2.0.26184\lib\net35\PusherRESTDotNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
@@ -69,6 +75,7 @@
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\backbone-min.js" />
+    <Content Include="Scripts\backpusher.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\custom\drawingmodule.paper.js" />
@@ -80,6 +87,7 @@
     <Content Include="Scripts\jquery-1.7.2.js" />
     <Content Include="Scripts\jquery-1.7.2.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\pusher.js" />
     <Content Include="Scripts\raphael-min.js" />
     <Content Include="Scripts\underscore-min.js" />
     <Content Include="Web.config" />

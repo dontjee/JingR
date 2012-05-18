@@ -63,6 +63,8 @@
    <script type="text/javascript" src="Scripts/raphael-min.js"></script>
    <script src="Scripts/underscore-min.js" type="text/javascript"></script>
    <script src="Scripts/backbone-min.js" type="text/javascript"></script>
+   <script src="Scripts/pusher.js" type="text/javascript"></script>
+   <script src="Scripts/backpusher.js" type="text/javascript"></script>
    <script src="Scripts/custom/drawingmodule.arrow.js" type="text/javascript"></script>
    <script src="Scripts/custom/drawingmodule.textbox.js" type="text/javascript"></script>
    <script src="Scripts/custom/drawingmodule.drawingbuttons.js" type="text/javascript"></script>

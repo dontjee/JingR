@@ -19,13 +19,19 @@
          $(this.el).show();
          $('#js-buttons').show();
 
+         var pusher = new Pusher('f92e432c5c1537977aaf');
+
          this.arrows = new window.TSC.ArrowCollection();
          this.arrows.url = '/api/' + this.model.attributes.id + '/arrows';
          this.arrows.bind('add', this.addArrow); // collection event binder
+         var arrowChannel = pusher.subscribe(this.model.attributes.id + '-' + 'arrows');
+         this.arrowPusher = new Backpusher(arrowChannel, this.arrows);
 
          this.textboxes = new TSC.TextBoxCollection();
          this.textboxes.url = '/api/' + this.model.attributes.id + '/textboxes';
          this.textboxes.bind('add', this.addTextbox);
+         var textboxChannel = pusher.subscribe(this.model.attributes.id + '-' + 'textboxes');
+         this.textboxPusher = new Backpusher(textboxChannel, this.textboxes);
 
          this.paper = Raphael("js-paper", 500, 500);
          var image = this.paper.image(this.model.attributes.imageUrl, 0, 0, 500, 500);
