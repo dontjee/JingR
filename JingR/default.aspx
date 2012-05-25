@@ -45,7 +45,7 @@
       <div class="modal-body">
          <label>
             Enter url below</label>
-         <input type="text" class="span3" placeholder="Url to image">
+         <input type="text" class="span3" placeholder="Url to image" value="http://localhost:61839/content/images/lighthouse.jpg">
       </div>
       <div class="modal-footer">
          <button type="submit" class="btn" data-dismiss="modal">
