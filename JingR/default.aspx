@@ -49,7 +49,7 @@
       <div class="modal-body">
          <label>
             Enter url below</label>
-         <input type="text" class="span3" placeholder="Url to image">
+         <input type="text" class="span3" placeholder="Url to image" value="http://content.screencast.localhost/users/e.dontje/folders/Default/media/a7bf11db-c0b9-441b-8165-775b559a69b5/rayandcaptainjing.png">
       </div>
       <div class="modal-footer">
          <button type="submit" class="btn" data-dismiss="modal">
